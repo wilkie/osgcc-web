@@ -1,0 +1,55 @@
+.topbar
+  .topbar-inner
+    .container
+      %h3
+        %a{:href => '/'}
+          OSGCC
+      %ul.nav
+        %li.active
+          %a{:href => '/'}
+            Home
+        %li.dropdown{'data-dropdown' => 'dropdown'}
+          %a.dropdown-toggle{:href => '#'} Competitions
+          %ul.dropdown-menu
+            %li
+              %a{:href => '/competitions/past'}
+                Past
+            %li
+              %a{:href => '/competitions/upcoming'}
+                Upcoming
+            %li
+              %a{:href => '/competition'}
+                Create New
+
+            -#
+              - if (current_comps.length)
+                %li.divider
+                each comp, comp_id in current_comps
+                  %li
+                    %a{:href => '/competition/#{comp._id}'}
+                      #{comp.name}
+        %li
+          %a{:href => '/about'}
+            About
+        %li
+          %a{:href => '/contact'}
+            Contact
+      %ul.nav.secondary-nav
+        - if false #logged in
+          %li.dropdown{'data-dropdown' => 'dropdown'}
+            %a.dropdown-toggle{:href => '#'}
+              -#
+                #{everyauth.github.user.login}
+            %ul.dropdown-menu
+              %li
+                %a{:href => '/profile'}
+                  Profile
+              %li.divider
+              %li
+                %a{:href => '/logout'}
+                  Log out
+        - else
+          %li
+            %a{:href => '/auth/github'}
+              Log In
+

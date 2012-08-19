@@ -1,5 +1,7 @@
 require 'sinatra'
 
+set :haml, :format => :html5
+
 get '/' do
-  'osgcc baby'
+  haml :index, :layout => :home_layout
 end
