@@ -1,6 +1,11 @@
 require 'sinatra'
+require 'mongo_mapper'
 
 set :haml, :format => :html5
+
+configure do
+  MongoMapper.database = 'osgcc'
+end
 
 get '/' do
   haml :index, :layout => :home_layout
