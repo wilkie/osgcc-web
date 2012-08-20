@@ -35,11 +35,10 @@
           %a{:href => url('/contact')}
             Contact
       %ul.nav.secondary-nav
-        - if false #logged in
+        - if logged_in?
           %li.dropdown{'data-dropdown' => 'dropdown'}
             %a.dropdown-toggle{:href => '#'}
-              -#
-                #{everyauth.github.user.login}
+              #{current_user.username}
             %ul.dropdown-menu
               %li
                 %a{:href => '/profile'}
