@@ -39,6 +39,11 @@ get '/contact' do
   haml :contact, :layout => :home_layout
 end
 
+get '/logout' do
+  session[:user_uid] = nil
+  redirect '/'
+end
+
 get '/auth/github/callback' do
   auth = request.env["omniauth.auth"]
 
