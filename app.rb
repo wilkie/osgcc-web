@@ -1,5 +1,6 @@
 require 'sinatra'
 require 'mongo_mapper'
+require_relative 'models/user'
 
 set :haml, :format => :html5
 
