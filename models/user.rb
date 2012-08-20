@@ -3,5 +3,10 @@ class User
 
   key :uid,        Integer, :required => true
   key :username,   String
+  key :admin,      Boolean, :default => false
   key :created_at, Time
+
+  def admin?
+    self.admin
+  end
 end
