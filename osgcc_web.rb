@@ -7,13 +7,18 @@ require_relative 'models/user'
 class OSGCCWeb < Sinatra::Base
   set :haml, :format => :html5
 
-  use Rack::Session::Cookie, :secret => ENV['SESSION_SECRET']
   use OmniAuth::Builder do
-      provider :github, ENV['GITHUB_KEY'], ENV['GITHUB_SECRET']
+    provider :github, ENV['GITHUB_KEY'], ENV['GITHUB_SECRET']
   end
 
-  configure do
-    MongoMapper.database = 'osgcc'
+  configure :test do
+    enable :sessions
+    MongoMapper.database = 'osgcc_test'
+  end
+
+  configure :development do
+    enable :sessions
+    MongoMapper.database = 'osgcc_development'
   end
 
   helpers do
