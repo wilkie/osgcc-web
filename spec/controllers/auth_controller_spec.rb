@@ -13,7 +13,15 @@ describe 'OSGCC-Web authentications' do
   end
 
   let(:mock_auth) do
-    OmniAuth.config.add_mock(:github, {:uid => 1111})
+    OmniAuth.config.add_mock(
+      :github,
+      {
+        :uid => 1111,
+        :credentials => {
+          :token => 'itsasecrettoeveryone'
+        }
+      }
+    )
     OmniAuth.config.mock_auth[:github]
   end
 
@@ -28,14 +36,28 @@ describe 'OSGCC-Web authentications' do
       get '/auth/github/callback', nil, {"omniauth.auth" => mock_auth}
       last_request.env['rack.session'][:user_uid].should equal mock_auth[:uid]
     end
+
+    it "saves the token in the session" do
+      get '/auth/github/callback', nil, {"omniauth.auth" => mock_auth}
+      last_request.env['rack.session'][:user_token].
+        should equal mock_auth[:credentials][:token]
+    end
   end
 
   describe "/logout" do
 
-    it "logs the user out" do
+    before :each do
       get '/auth/github/callback', nil, {"omniauth.auth" => mock_auth}
+    end
+
+    it "logs the user out" do
       get '/logout'
       last_request.env['rack.session'][:user_uid].should be_nil
+    end
+
+    it "drops the user token" do
+      get '/logout'
+      last_request.env['rack.session'][:user_token].should be_nil
     end
   end
 end
