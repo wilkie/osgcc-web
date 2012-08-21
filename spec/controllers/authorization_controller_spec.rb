@@ -1,11 +1,8 @@
 require_relative '../spec_helper.rb'
 
 require 'omniauth'
-require_relative '../../osgcc_web'
 
 describe 'OSGCC-Web authentications' do
-
-  include Rack::Test::Methods
   OmniAuth.config.test_mode = true
 
   def app
