@@ -17,6 +17,15 @@ Authentication via Github OAuth
 
 bundle install
 
+register the app on Github (https://github.com/settings/applications)
+
+set the callback url to your.domain/auth/github/callback
+
+`cp api_keys.sample.yml api_keys.yml` and fill in your client id and client
+secret
+
+`rackup`
+
 ## The Idea
 
 OSGCC admins will create a Competition model (name, start_time, end_time).

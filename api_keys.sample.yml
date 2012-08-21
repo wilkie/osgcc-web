@@ -1,0 +1,7 @@
+development:
+  CLIENT_ID:
+  CLIENT_SECRET:
+
+production:
+  CLIENT_ID:
+  CLIENT_SECRET:

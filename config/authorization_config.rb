@@ -3,6 +3,6 @@ require 'omniauth-github'
 
 class OSGCCWeb
   use OmniAuth::Builder do
-    provider :github, ENV['GITHUB_KEY'], ENV['GITHUB_SECRET']
+    provider :github, ENV['CLIENT_ID'], ENV['CLIENT_SECRET']
   end
 end
