@@ -1,4 +1,8 @@
 class OSGCCWeb
+  get '/login' do
+    redirect '/auth/github'
+  end
+
   get '/auth/github/callback' do
     auth = request.env["omniauth.auth"]
 

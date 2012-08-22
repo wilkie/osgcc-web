@@ -6,6 +6,15 @@ describe 'OSGCC-Web authentications' do
     OSGCCWeb
   end
 
+  describe "/login" do
+
+    it "redirects to the github authentication" do
+      get '/login'
+      last_response.should be_redirect
+      last_response.location.should == 'http://example.org/auth/github'
+    end
+  end
+
   describe "/auth/github/callback" do
 
     it "creates a user from the auth uid if none exists" do
