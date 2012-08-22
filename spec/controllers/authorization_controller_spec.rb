@@ -1,25 +1,9 @@
 require_relative '../spec_helper.rb'
 
-require 'omniauth'
-
 describe 'OSGCC-Web authentications' do
-  OmniAuth.config.test_mode = true
 
   def app
     OSGCCWeb
-  end
-
-  let(:mock_auth) do
-    OmniAuth.config.add_mock(
-      :github,
-      {
-        :uid => 1111,
-        :credentials => {
-          :token => 'itsasecrettoeveryone'
-        }
-      }
-    )
-    OmniAuth.config.mock_auth[:github]
   end
 
   describe "/auth/github/callback" do
