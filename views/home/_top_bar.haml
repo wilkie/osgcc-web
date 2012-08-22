@@ -12,13 +12,16 @@
           %a.dropdown-toggle{:href => '#'} Competitions
           %ul.dropdown-menu
             %li
+              %a{:href => '/competitions'}
+                All
+            %li
               %a{:href => '/competitions/past'}
                 Past
             %li
               %a{:href => '/competitions/upcoming'}
                 Upcoming
             %li
-              %a{:href => '/competition'}
+              %a{:href => url('/competitions/new')}
                 Create New
 
             -#
@@ -45,10 +48,10 @@
                   Profile
               %li.divider
               %li
-                %a{:href => '/logout'}
+                %a{:href => url('/logout')}
                   Log out
         - else
           %li
-            %a{:href => url('/auth/github')}
+            %a{:href => url('/login')}
               Log In
 
