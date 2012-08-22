@@ -6,17 +6,6 @@ describe 'OSCGG-Web competitions' do
     OSGCCWeb
   end
 
-  let(:user) do
-    User.new(:uid => 1)
-  end
-
-  let(:admin_user) do
-    User.create(:uid => 2).tap do |u|
-      u.admin = 1
-      u.save
-    end
-  end
-
   describe "GET /competitions" do
     it "loads" do
       get "/competitions"
@@ -31,7 +20,7 @@ describe 'OSCGG-Web competitions' do
     end
 
     it "returns a 404 if the current user is not an admin" do
-      get '/auth/github/callback', nil, {"omniauth.auth" => mock_auth(user.uid)}
+      login_as regular_user
       post '/competitions'
       last_response.status.should == 404
     end
@@ -48,7 +37,7 @@ describe 'OSCGG-Web competitions' do
       end
 
       before :each do
-        get '/auth/github/callback', nil, {"omniauth.auth" => mock_auth(admin_user.uid)}
+        login_as admin_user
       end
 
       it "creates a competition" do
@@ -81,13 +70,13 @@ describe 'OSCGG-Web competitions' do
     end
 
     it "returns a 404 if the current user is not an admin" do
-      get '/auth/github/callback', nil, {"omniauth.auth" => mock_auth(user.uid)}
+      login_as regular_user
       get '/competitions/new'
       last_response.status.should == 404
     end
 
     it "lets admins create a new competition" do
-      get '/auth/github/callback', nil, {"omniauth.auth" => mock_auth(admin_user.uid)}
+      login_as admin_user
       get '/competitions/new'
       last_response.status.should == 200
     end

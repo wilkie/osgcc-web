@@ -14,21 +14,21 @@ describe 'OSGCC-Web authentications' do
     end
 
     it "logs the user in" do
-      get '/auth/github/callback', nil, {"omniauth.auth" => mock_auth}
-      last_request.env['rack.session'][:user_uid].should equal mock_auth[:uid]
+      login_as regular_user
+      last_request.env['rack.session'][:user_uid].should == regular_user.uid
     end
 
     it "saves the token in the session" do
-      get '/auth/github/callback', nil, {"omniauth.auth" => mock_auth}
+      login_as regular_user
       last_request.env['rack.session'][:user_token].
-        should equal mock_auth[:credentials][:token]
+        should == mock_auth[:credentials][:token]
     end
   end
 
   describe "/logout" do
 
     before :each do
-      get '/auth/github/callback', nil, {"omniauth.auth" => mock_auth}
+      login_as regular_user
     end
 
     it "logs the user out" do
