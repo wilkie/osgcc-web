@@ -1,5 +1,6 @@
 ENV['RACK_ENV'] = 'test'
 
+require 'capybara/rspec'
 require 'database_cleaner'
 require 'mongo_mapper'
 require 'omniauth'
@@ -8,6 +9,8 @@ require_relative '../osgcc_web'
 
 MongoMapper.connection = Mongo::Connection.new('localhost')
 MongoMapper.database   = "osgcc_test"
+
+Capybara.app = OSGCCWeb
 
 RSpec.configure do |config|
   config.include Rack::Test::Methods
