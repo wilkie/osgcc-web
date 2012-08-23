@@ -2,7 +2,7 @@ class OSGCCWeb
 
   get '/competitions' do
     @competitions = Competition.all
-    haml :'competitions/index', :layout => :home_layout
+    haml :'competitions/index', :layout => :default_layout
   end
 
   post "/competitions", :authorize => :admin do
@@ -16,17 +16,17 @@ class OSGCCWeb
   end
 
   get '/competitions/new', :authorize => :admin do
-    haml :'competitions/new', :layout => :home_layout
+    haml :'competitions/new', :layout => :default_layout
   end
 
   get '/competitions/:id' do
     @competition = Competition.find(params[:id])
-    haml :'competitions/show', :layout => :home_layout
+    haml :'competitions/show', :layout => :default_layout
   end
 
   get '/competitions/:id/edit', :authorize => :admin do
     @competition = Competition.find(params[:id])
-    haml :'competitions/edit', :layout => :home_layout
+    haml :'competitions/edit', :layout => :default_layout
   end
 
   post '/competitions/:id', :authorize => :admin do
