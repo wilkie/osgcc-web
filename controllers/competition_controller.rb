@@ -5,8 +5,7 @@ class OSGCCWeb
     haml :'competitions/index', :layout => :home_layout
   end
 
-  post "/competitions" do
-    return 404 unless (logged_in? && current_user.admin?)
+  post "/competitions", :authorize => true do
 
     name       = params[:comp_name]
     start_date = DateTime.strptime("#{params[:start_date]}T#{params[:start_time]}","%Y-%m-%dT%I:%M%P")
@@ -16,8 +15,7 @@ class OSGCCWeb
     redirect "/competitions/#{c._id.to_s}"
   end
 
-  get '/competitions/new' do
-    return 404 unless (logged_in? && current_user.admin?)
+  get '/competitions/new', :authorize => true do
     haml :'competitions/new', :layout => :home_layout
   end
 
@@ -25,5 +23,4 @@ class OSGCCWeb
     @competition = Competition.find(params[:id])
     haml :'competitions/show', :layout => :home_layout
   end
-
 end
