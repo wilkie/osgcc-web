@@ -1,9 +1,8 @@
-require 'mongo_mapper'
-require_relative '../../models/user'
+require_relative '../spec_helper'
 
 describe User do
 
-  let(:user) { User.new }
+  let(:user) { User.new(:username => "Normy", :uid => 1234)}
 
   describe "#admin?" do
     it "returns true if the user has sufficient priviledge" do

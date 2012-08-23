@@ -1,5 +1,4 @@
-require 'mongo_mapper'
-require_relative '../../models/competition'
+require_relative '../spec_helper'
 
 describe Competition do
 
