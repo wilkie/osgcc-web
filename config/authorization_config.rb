@@ -2,9 +2,14 @@ require 'omniauth'
 require 'omniauth-github'
 
 class OSGCCWeb
-  set(:authorize) do |bool|
+  set(:authorize) do |level|
     condition do
-      raise Sinatra::NotFound unless (logged_in? && current_user.admin?)
+      case level
+      when :user
+        redirect "/login" unless logged_in?
+      when :admin
+        raise Sinatra::NotFound unless (logged_in? && current_user.admin?)
+      end
     end
   end
 

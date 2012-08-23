@@ -5,7 +5,7 @@ class OSGCCWeb
     haml :'competitions/index', :layout => :home_layout
   end
 
-  post "/competitions", :authorize => true do
+  post "/competitions", :authorize => :admin do
 
     name       = params[:comp_name]
     start_date = DateTime.strptime("#{params[:start_date]}T#{params[:start_time]}","%Y-%m-%dT%I:%M%P")
@@ -15,7 +15,7 @@ class OSGCCWeb
     redirect "/competitions/#{c._id.to_s}"
   end
 
-  get '/competitions/new', :authorize => true do
+  get '/competitions/new', :authorize => :admin do
     haml :'competitions/new', :layout => :home_layout
   end
 
@@ -24,12 +24,12 @@ class OSGCCWeb
     haml :'competitions/show', :layout => :home_layout
   end
 
-  get '/competitions/:id/edit', :authorize => true do
+  get '/competitions/:id/edit', :authorize => :admin do
     @competition = Competition.find(params[:id])
     haml :'competitions/edit', :layout => :home_layout
   end
 
-  post '/competitions/:id', :authorize => true do
+  post '/competitions/:id', :authorize => :admin do
     @competition = Competition.find(params[:id])
 
     name       = params[:comp_name]
