@@ -5,6 +5,8 @@ class Competition
   key :start_date, Time
   key :end_date,   Time
 
+  many :teams
+
   def formatted_start
     start_date.strftime('%A %B %-d, %Y %l:%M %P')
   end
