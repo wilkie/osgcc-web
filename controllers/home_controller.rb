@@ -2,14 +2,14 @@
 
 class OSGCCWeb
   get '/' do
-    haml :index, :layout => :home_layout
+    haml :'home/index', :layout => :home_layout
   end
 
   get '/about' do
-    haml :about, :layout => :home_layout
+    haml :'home/about', :layout => :home_layout
   end
 
   get '/contact' do
-    haml :contact, :layout => :home_layout
+    haml :'home/contact', :layout => :home_layout
   end
 end
