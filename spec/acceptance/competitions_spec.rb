@@ -73,4 +73,74 @@ describe 'OSCGG-Web competitions', :type => :request do
       end
     end
   end
+
+  describe "editing competitions" do
+
+    let(:competition) do
+      Competition.create(:name       => "original name",
+                         :start_date => DateTime.yesterday,
+                         :end_date   => DateTime.tomorrow)
+    end
+
+    context "without a user" do
+      it "doesn't show the edit button" do
+        visit "/competitions/#{competition._id}"
+        page.should_not have_content "Edit"
+      end
+
+      it "returns a 404" do
+        visit "/competitions/#{competition._id}/edit"
+        page.status_code.should == 404
+      end
+
+      it "via post returns a 404" do
+        post "/competitions/#{competition._id}/edit"
+        last_response.status.should == 404
+      end
+    end
+
+    context "with a non-admin user" do
+      before :each do
+        login_as regular_user
+      end
+
+      it "doesn't show the edit button" do
+        visit "/competitions/#{competition._id}"
+        page.should_not have_content "Edit"
+      end
+
+      it "returns a 404" do
+        visit "/competitions/#{competition._id}/edit"
+        page.status_code.should == 404
+      end
+
+      it "via post returns a 404" do
+        post "/competitions/#{competition._id}/edit"
+        last_response.status.should == 404
+      end
+    end
+
+    context "when logged in as an admin" do
+      before :each do
+        login_as admin_user
+      end
+
+      it "you can edit a competition" do
+        visit "/competitions/#{competition._id}"
+        click_on "Edit"
+
+        fill_in 'comp_name',  :with => "new name"
+        fill_in 'start_date', :with => "1987-01-25"
+        fill_in 'start_time', :with => "12:00pm"
+        fill_in 'end_date',   :with => "1987-01-26"
+        fill_in 'end_time',   :with => "12:00pm"
+        click_on "Update Competition"
+
+        visit "/competitions/#{competition._id}"
+        page.should have_content "new name"
+        page.should have_content "January 25, 1987 12:00 pm"
+        page.should have_content "January 25, 1987 12:00 pm"
+      end
+    end
+  end
 end
