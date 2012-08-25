@@ -9,4 +9,14 @@ class Team
   many       :users, :in => :user_ids, :class_name => "User"
 
   timestamps!
+
+  TEAM_LIMIT = 3
+
+  def member?(user)
+    return users.include? user
+  end
+
+  def full?
+    return users.count >= TEAM_LIMIT
+  end
 end
