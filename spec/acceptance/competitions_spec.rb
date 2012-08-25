@@ -65,11 +65,25 @@ describe 'OSCGG-Web competitions', :type => :request do
         fill_in 'start_time', :with => "6:00pm"
         fill_in 'end_date',   :with => "2012-06-07"
         fill_in 'end_time',   :with => "6:00pm"
+        select 'Greenwich', :from => "timezone"
         click_on 'Create Competition'
 
         page.should have_content "test competition"
         page.should have_content "June 6, 2012 6:00 pm"
         page.should have_content "June 7, 2012 6:00 pm"
+      end
+
+      it "saves the timezone correctly for a competition" do
+        visit '/competitions/new'
+        fill_in 'start_date', :with => "2012-06-06"
+        fill_in 'start_time', :with => "6:00pm"
+        fill_in 'end_date',   :with => "2012-06-07"
+        fill_in 'end_time',   :with => "6:00pm"
+        select 'Europe - London', :from => "timezone"
+        click_on 'Create Competition'
+
+        page.should have_content "June 6, 2012 6:00 pm BST"
+        page.should have_content "June 7, 2012 6:00 pm BST"
       end
     end
   end
@@ -77,9 +91,10 @@ describe 'OSCGG-Web competitions', :type => :request do
   describe "editing competitions" do
 
     let(:competition) do
-      Competition.create(:name       => "original name",
-                         :start_date => DateTime.yesterday,
-                         :end_date   => DateTime.tomorrow)
+      Competition.create(:name          => "original name",
+                         :start_date    => DateTime.yesterday,
+                         :end_date      => DateTime.tomorrow,
+                         :tz_identifier => 'Greenwich')
     end
 
     context "without a user" do

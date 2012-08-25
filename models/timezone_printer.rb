@@ -46,6 +46,10 @@ class TimezonePrinter
     @zone = timezone
   end
 
+  def identifier
+    @zone.identifier
+  end
+
   def abbr
     @zone.strftime("%Z")
   end
@@ -64,6 +68,10 @@ class TimezonePrinter
 
   def to_option
     "[ #{abbr} #{offset} ] #{name}"
+  end
+
+  def to_local(time)
+    @zone.utc_to_local(time).strftime('%A %B %-d, %Y %l:%M %P ') + abbr
   end
 
 end

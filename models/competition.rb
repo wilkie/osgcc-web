@@ -1,9 +1,10 @@
 class Competition
   include MongoMapper::Document
 
-  key :name,       String
-  key :start_date, Time
-  key :end_date,   Time
+  key :name,          String
+  key :start_date,    Time
+  key :end_date,      Time
+  key :tz_identifier, String
 
   many :teams
 
@@ -26,12 +27,16 @@ class Competition
     Competition.where(:end_date.gt => Time.now)
   end
 
+  def timezone
+    TZInfo::Timezone.get(tz_identifier)
+  end
+
   def formatted_start
-    start_date.strftime('%A %B %-d, %Y %l:%M %P')
+    TimezonePrinter.new(timezone).to_local(start_date)
   end
 
   def formatted_end
-    end_date.strftime('%A %B %-d, %Y %l:%M %P')
+    TimezonePrinter.new(timezone).to_local(end_date)
   end
 
   def passed?
