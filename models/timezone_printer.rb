@@ -1,8 +1,8 @@
 require 'tzinfo'
 
-class TimezoneFilter
+class TimezonePrinter
 
-  FILTER_LIST = [ 'Pacific/Kwajalein',
+  FILTER_LIST = [
                   'Pacific/Midway',
                   'US/Hawaii',
                   'US/Alaska',
@@ -10,18 +10,17 @@ class TimezoneFilter
                   'US/Mountain',
                   'US/Central',
                   'US/Eastern',
-                  'Canada/Atlantic',
                   'Canada/Newfoundland',
-                  'Brazil/East',
+                  'Canada/Atlantic',
                   'Brazil/West',
-                  'Atlantic/Azores',
+                  'Brazil/East',
+                  'Greenwich',
                   'Europe/London',
                   'Europe/Paris',
                   'Europe/Kaliningrad',
                   'Asia/Baghdad',
-                  'Asia/Tehran',
                   'Asia/Muscat',
-                  'Asia/Kabul',
+                  'Asia/Tehran',
                   'Asia/Karachi',
                   'Asia/Calcutta',
                   'Asia/Kathmandu',
@@ -32,15 +31,39 @@ class TimezoneFilter
                   'Australia/West',
                   'Australia/Adelaide',
                   'Australia/Sydney',
-                  'Asia/Magadan',
-                  'Pacific/Auckland' ]
+                  'Pacific/Auckland'
+                ]
 
+  def self.filtered_list
+    FILTER_LIST.map{ |t| TimezonePrinter.new(TZInfo::Timezone.get(t)) }
+  end
 
-  def self.unique
+  def self.unique_list
     TZInfo::Timezone.all.uniq{ |t| t.strftime("%Z") }
   end
 
-  def self.small_list
-    FILTER_LIST.map{ |t| TZInfo::Timezone.get(t) }
+  def initialize(timezone)
+    @zone = timezone
   end
+
+  def abbr
+    @zone.strftime("%Z")
+  end
+
+  def name
+    @zone.friendly_identifier
+  end
+
+  def offset
+    offset  = @zone.current_period.utc_total_offset
+    minutes = (offset/60) % 60
+    hours   = (offset/3600).abs
+    sign    = (offset > 0) ? "+" : "-"
+    "#{sign}#{"%02d" % hours}:#{"%02d" % minutes}"
+  end
+
+  def to_option
+    "[ #{abbr} #{offset} ] #{name}"
+  end
+
 end

@@ -16,6 +16,7 @@ class OSGCCWeb
   end
 
   get '/competitions/new', :authorize => :admin do
+    @zones = TimezonePrinter.filtered_list
     haml :'competitions/new', :layout => :default_layout
   end
 
