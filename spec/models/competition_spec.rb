@@ -2,6 +2,93 @@ require_relative '../spec_helper'
 
 describe Competition do
 
+  let(:future_comp) do
+    Competition.create(:start_date => DateTime.tomorrow,
+                       :end_date   => DateTime.tomorrow + 1)
+  end
+
+  let(:current_comp) do
+    Competition.create(:start_date => DateTime.yesterday,
+                       :end_date   => DateTime.tomorrow)
+  end
+
+  let(:past_comp) do
+    Competition.create(:start_date => DateTime.yesterday - 1,
+                       :end_date   => DateTime.yesterday)
+  end
+
+  describe ".upcoming" do
+
+    it "returns all competitions that haven't started yet" do
+      c = future_comp
+      Competition.upcoming.should include c
+    end
+
+    it "does not return competitions that have started" do
+      c = current_comp
+      Competition.upcoming.should_not include c
+    end
+
+    it "does not return any competitions that have ended" do
+      c = past_comp
+      Competition.upcoming.should_not include c
+    end
+  end
+
+  describe ".in_progress" do
+
+    it "does not return any competitions that haven't started yet" do
+      c = future_comp
+      Competition.in_progress.should_not include c
+    end
+
+    it "returns all competitions that have started" do
+      c = current_comp
+      Competition.in_progress.should include c
+    end
+
+    it "does not return any competitions that have ended" do
+      c = past_comp
+      Competition.in_progress.should_not include c
+    end
+  end
+
+  describe ".passed" do
+
+    it "does not return any competitions that haven't started yet" do
+      c = future_comp
+      Competition.passed.should_not include c
+    end
+
+    it "does not return any competitions that have started" do
+      c = current_comp
+      Competition.passed.should_not include c
+    end
+
+    it "returns all competitions that have ended" do
+      c = past_comp
+      Competition.passed.should include c
+    end
+  end
+
+  describe ".upcoming_or_in_progress" do
+
+    it "returns all upcoming competitions" do
+      c = future_comp
+      Competition.upcoming_or_in_progress.should include c
+    end
+
+    it "returns all in-progress competitions" do
+      c = current_comp
+      Competition.upcoming_or_in_progress.should include c
+    end
+
+    it "does not return any competitions that have ended" do
+      c = past_comp
+      Competition.upcoming_or_in_progress.should_not include c
+    end
+  end
+
   describe "#passed?" do
 
     it "returns true if the contest end_date is in the past" do

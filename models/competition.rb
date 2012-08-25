@@ -9,6 +9,23 @@ class Competition
 
   timestamps!
 
+  def self.upcoming
+    Competition.where(:start_date.gt => Time.now)
+  end
+
+  def self.in_progress
+    Competition.where(:start_date.lte => Time.now,
+                      :end_date.gte   => Time.now)
+  end
+
+  def self.passed
+    Competition.where(:end_date.lt => Time.now)
+  end
+
+  def self.upcoming_or_in_progress
+    Competition.where(:end_date.gt => Time.now)
+  end
+
   def formatted_start
     start_date.strftime('%A %B %-d, %Y %l:%M %P')
   end
