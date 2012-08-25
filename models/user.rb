@@ -5,7 +5,8 @@ class User
   key :username,   String
   key :image_url,  String
   key :admin,      Boolean, :default => false
-  key :created_at, Time
+
+  timestamps!
 
   def admin?
     self.admin

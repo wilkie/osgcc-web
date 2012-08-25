@@ -7,6 +7,8 @@ class Competition
 
   many :teams
 
+  timestamps!
+
   def formatted_start
     start_date.strftime('%A %B %-d, %Y %l:%M %P')
   end

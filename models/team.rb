@@ -6,4 +6,6 @@ class Team
 
   belongs_to :competition
   many       :users, :in => :user_ids, :class_name => "User"
+
+  timestamps!
 end
