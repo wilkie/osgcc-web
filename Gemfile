@@ -6,6 +6,7 @@ gem 'mongo_mapper'
 gem 'bson_ext'
 gem 'omniauth'
 gem 'omniauth-github'
+gem 'tzinfo'
 
 group :test do
   gem 'capybara'

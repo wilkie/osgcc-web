@@ -8,8 +8,8 @@ class OSGCCWeb
   post "/competitions", :authorize => :admin do
 
     name       = params[:comp_name]
-    start_date = DateTime.strptime("#{params[:start_date]}T#{params[:start_time]}","%Y-%m-%dT%I:%M%P")
-    end_date   = DateTime.strptime("#{params[:end_date]}T#{params[:end_time]}","%Y-%m-%dT%I:%M%P")
+    start_date = DateTime.strptime("#{params[:start_date]}T#{params[:start_time]}#{params[:timezone]}","%Y-%m-%dT%I:%M%P%Z")
+    end_date   = DateTime.strptime("#{params[:end_date]}T#{params[:end_time]}#{params[:timezone]}","%Y-%m-%dT%I:%M%P%Z")
     c = Competition.create(:name => name, :start_date => start_date, :end_date => end_date)
 
     redirect "/competitions/#{c._id.to_s}"
