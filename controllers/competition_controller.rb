@@ -6,7 +6,6 @@ class OSGCCWeb
   end
 
   post "/competitions", :authorize => :admin do
-
     name       = params[:comp_name]
     timezone   = TimezonePrinter.new(TZInfo::Timezone.get(params[:timezone]))
     start_date = DateTime.strptime("#{params[:start_date]}T#{params[:start_time]}#{timezone.abbr}","%Y-%m-%dT%I:%M%P%Z")
@@ -14,6 +13,16 @@ class OSGCCWeb
     c = Competition.create(:name => name, :start_date => start_date, :end_date => end_date, :tz_identifier => timezone.identifier)
 
     redirect "/competitions/#{c._id.to_s}"
+  end
+
+  get '/competitions/past' do
+    @competitions = Competition.passed
+    haml :'competitions/index', :layout => :default_layout
+  end
+
+  get '/competitions/upcoming' do
+    @competitions = Competition.upcoming
+    haml :'competitions/index', :layout => :default_layout
   end
 
   get '/competitions/new', :authorize => :admin do

@@ -13,6 +13,56 @@ describe 'OSCGG-Web competitions', :type => :request do
     end
   end
 
+  describe "viewing past competitions" do
+    it "loads" do
+      visit "/competitions/past"
+      page.status_code.should == 200
+    end
+
+    it "shows valid competitions" do
+      Competition.create(:start_date    => DateTime.yesterday - 1,
+                         :end_date      => DateTime.yesterday,
+                         :tz_identifier => 'Greenwich',
+                         :name          => "blarg comp")
+      visit "/competitions/past"
+      page.should have_content "blarg comp"
+    end
+
+    it "does not show invalid competitions" do
+      Competition.create(:start_date    => DateTime.tomorrow,
+                         :end_date      => DateTime.tomorrow + 1,
+                         :tz_identifier => 'Greenwich',
+                         :name          => "glob comp")
+      visit "/competitions/past"
+      page.should_not have_content "glob comp"
+    end
+  end
+
+  describe "viewing upcoming competitions" do
+    it "loads" do
+      visit "/competitions/upcoming"
+      page.status_code.should == 200
+    end
+
+    it "shows valid competitions" do
+      Competition.create(:start_date    => DateTime.tomorrow,
+                         :end_date      => DateTime.tomorrow + 1,
+                         :tz_identifier => 'Greenwich',
+                         :name          => "glob comp")
+      visit "/competitions/upcoming"
+      page.should have_content "glob comp"
+    end
+
+    it "does not show invalid competitions" do
+      Competition.create(:start_date    => DateTime.yesterday - 1,
+                         :end_date      => DateTime.yesterday,
+                         :tz_identifier => 'Greenwich',
+                         :name          => "blarg comp")
+      visit "/competitions/upcoming"
+      page.should_not have_content "blarg comp"
+    end
+  end
+
   describe "creating competitions" do
 
     context "without a user" do
@@ -65,7 +115,7 @@ describe 'OSCGG-Web competitions', :type => :request do
         fill_in 'start_time', :with => "6:00pm"
         fill_in 'end_date',   :with => "2012-06-07"
         fill_in 'end_time',   :with => "6:00pm"
-        select 'Greenwich', :from => "timezone"
+        select 'Greenwich',   :from => "timezone"
         click_on 'Create Competition'
 
         page.should have_content "test competition"
